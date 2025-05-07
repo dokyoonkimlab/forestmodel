@@ -347,11 +347,6 @@ panel_forest_plot <- function(forest_data,
     main_plot <- main_plot +
       geom_polygon(aes(x, y, group = group), forest_diamonds, fill = format_options$colour)
   }
-  main_plot <- main_plot +
-    geom_point(aes(x, y),
-      size = format_options$point_size, filter(mapped_data, !diamond),
-      colour = format_options$colour, shape = format_options$shape, na.rm = TRUE
-    )
 
   # Add arrow here
   if ("arrow_tag.r" %in% colnames(forest_data)) {
@@ -365,8 +360,8 @@ panel_forest_plot <- function(forest_data,
 
     main_plot <- main_plot +
       geom_errorbarh(aes(y = y, xmin = .data$xmin2, xmax = .data$xmax2),
-        filter(mapped_data, !diamond & !(is.na(xmin) & is.na(xmax))),
-        colour = format_options$colour, height = 0
+                     filter(mapped_data, !diamond & !(is.na(xmin) & is.na(xmax))),
+                     colour = "black", height = 0
       )
 
     main_plot <- main_plot +
@@ -392,10 +387,16 @@ panel_forest_plot <- function(forest_data,
   } else {
     main_plot <- main_plot +
       geom_errorbarh(aes(y = y, xmin = xmin, xmax = xmax),
-        filter(mapped_data, !diamond & !(is.na(xmin) & is.na(xmax))),
-        colour = format_options$colour, height = 0.15
+                     filter(mapped_data, !diamond & !(is.na(xmin) & is.na(xmax))),
+                     colour = "black", height = 0.15
       )
   }
+  
+  main_plot <- main_plot +
+    geom_point(aes(x, y, color = y),
+               size = format_options$point_size, filter(mapped_data, !diamond),
+               shape = format_options$shape, na.rm = TRUE
+    )
 
   main_plot <- main_plot +
     geom_segment(
